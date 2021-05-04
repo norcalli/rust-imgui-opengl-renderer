@@ -226,6 +226,7 @@ impl Renderer {
                 clip_rect: [x, y, z, w],
                 texture_id,
                 idx_offset,
+                vtx_offset,
                 ..
               },
             } => {
@@ -238,7 +239,11 @@ impl Renderer {
 
               let idx_size = if mem::size_of::<DrawIdx>() == 2 { gl::UNSIGNED_SHORT } else { gl::UNSIGNED_INT };
 
-              gl.DrawElements(gl::TRIANGLES, count as _, idx_size, (idx_offset * mem::size_of::<DrawIdx>()) as _);
+              gl.DrawElementsBaseVertex(gl::TRIANGLES,
+                                        count as _,
+                                        idx_size,
+                                        (idx_offset * mem::size_of::<DrawIdx>()) as _,
+                                        vtx_offset as _);
             },
             DrawCmd::ResetRenderState => {
               unimplemented!("Haven't implemented DrawCmd::ResetRenderState yet");
